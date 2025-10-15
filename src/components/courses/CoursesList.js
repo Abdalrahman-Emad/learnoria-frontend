@@ -407,10 +407,6 @@
 //   );
 // }
 
-
-
-
-
 // "use client";
 
 // import { useState, useMemo, useEffect, useCallback } from "react";
@@ -700,17 +696,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
@@ -799,42 +784,81 @@ export default function CoursesList() {
       list = list.filter((course) => {
         const price = Number(course.price) || 0;
         switch (priceRange) {
-          case "under-1000": return price < 1000;
-          case "1000-2000": return price >= 1000 && price <= 2000;
-          case "2000-3000": return price >= 2000 && price <= 3000;
-          case "over-3000": return price > 3000;
-          default: return true;
+          case "under-1000":
+            return price < 1000;
+          case "1000-2000":
+            return price >= 1000 && price <= 2000;
+          case "2000-3000":
+            return price >= 2000 && price <= 3000;
+          case "over-3000":
+            return price > 3000;
+          default:
+            return true;
         }
       });
     }
 
-    if (fieldFilter !== "all") list = list.filter((course) => course.field === fieldFilter);
-    if (cityFilter !== "all") list = list.filter((course) => course.city === cityFilter);
+    if (fieldFilter !== "all")
+      list = list.filter((course) => course.field === fieldFilter);
+    if (cityFilter !== "all")
+      list = list.filter((course) => course.city === cityFilter);
     if (durationFilter !== "all") {
       list = list.filter((course) => {
         const duration = Number(course.duration) || 0;
         switch (durationFilter) {
-          case "short": return duration <= 60;
-          case "medium": return duration > 60 && duration <= 120;
-          case "long": return duration > 120;
-          default: return true;
+          case "short":
+            return duration <= 60;
+          case "medium":
+            return duration > 60 && duration <= 120;
+          case "long":
+            return duration > 120;
+          default:
+            return true;
         }
       });
     }
 
     switch (sortBy) {
-      case "name": return list.sort((a, b) => a.title.localeCompare(b.title));
-      case "price-low": return list.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      case "price-high": return list.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      case "rating": return list.sort((a, b) => (parseFloat(b.ratings?.average_rating) || 0) - (parseFloat(a.ratings?.average_rating) || 0));
-      case "duration": return list.sort((a, b) => (Number(a.duration) || 0) - (Number(b.duration) || 0));
+      case "name":
+        return list.sort((a, b) => a.title.localeCompare(b.title));
+      case "price-low":
+        return list.sort(
+          (a, b) => (Number(a.price) || 0) - (Number(b.price) || 0)
+        );
+      case "price-high":
+        return list.sort(
+          (a, b) => (Number(b.price) || 0) - (Number(a.price) || 0)
+        );
+      case "rating":
+        return list.sort(
+          (a, b) =>
+            (parseFloat(b.ratings?.average_rating) || 0) -
+            (parseFloat(a.ratings?.average_rating) || 0)
+        );
+      case "duration":
+        return list.sort(
+          (a, b) => (Number(a.duration) || 0) - (Number(b.duration) || 0)
+        );
       case "newest":
-      default: return list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      default:
+        return list.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
     }
-  }, [courses, searchTerm, priceRange, fieldFilter, cityFilter, durationFilter, sortBy]);
+  }, [
+    courses,
+    searchTerm,
+    priceRange,
+    fieldFilter,
+    cityFilter,
+    durationFilter,
+    sortBy,
+  ]);
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredAndSortedCourses.length / coursesPerPage);
+  const totalPages = Math.ceil(
+    filteredAndSortedCourses.length / coursesPerPage
+  );
   const currentCourses = filteredAndSortedCourses.slice(
     (currentPage - 1) * coursesPerPage,
     currentPage * coursesPerPage
@@ -846,22 +870,34 @@ export default function CoursesList() {
     scrollToTop();
   };
 
-  const uniqueFields = useMemo(() => [...new Set(courses.map((c) => c.field))].sort(), [courses]);
-  const uniqueCities = useMemo(() => [...new Set(courses.map((c) => c.city))].sort(), [courses]);
+  const uniqueFields = useMemo(
+    () => [...new Set(courses.map((c) => c.field))].sort(),
+    [courses]
+  );
+  const uniqueCities = useMemo(
+    () => [...new Set(courses.map((c) => c.city))].sort(),
+    [courses]
+  );
 
   const clearAllFilters = useCallback(() => {
-    setSearchTerm(""); 
-    setPriceRange("all"); 
-    setFieldFilter("all"); 
-    setCityFilter("all"); 
-    setDurationFilter("all"); 
+    setSearchTerm("");
+    setPriceRange("all");
+    setFieldFilter("all");
+    setCityFilter("all");
+    setDurationFilter("all");
     setSortBy("newest");
     setCurrentPage(1);
     window.history.replaceState({}, "", window.location.pathname);
   }, []);
 
   const hasActiveFilters = useMemo(() => {
-    return searchTerm || priceRange !== "all" || fieldFilter !== "all" || cityFilter !== "all" || durationFilter !== "all";
+    return (
+      searchTerm ||
+      priceRange !== "all" ||
+      fieldFilter !== "all" ||
+      cityFilter !== "all" ||
+      durationFilter !== "all"
+    );
   }, [searchTerm, priceRange, fieldFilter, cityFilter, durationFilter]);
 
   const LoadingSkeleton = () => (
@@ -872,16 +908,32 @@ export default function CoursesList() {
     </div>
   );
 
-  if (isLoading) return <div className="min-h-screen p-12"><LoadingSkeleton /></div>;
-  if (isError) return <div className="min-h-screen flex items-center justify-center p-12 text-red-600">Failed to load courses. Please try again later.</div>;
+  if (isLoading)
+    return (
+      <div className="min-h-screen p-12">
+        <LoadingSkeleton />
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="min-h-screen flex items-center justify-center p-12 text-red-600">
+        Failed to load courses. Please try again later.
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-6 py-12">
+      {/* <div className="container mx-auto px-6 py-12"> */}
+      <div className="max-w-7xl mx-auto px-6 md:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Our Courses</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">Explore our comprehensive collection of courses designed to help you grow and succeed</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Discover Our Courses
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Explore our comprehensive collection of courses designed to help you
+            grow and succeed
+          </p>
         </div>
 
         {/* Filters */}
@@ -923,7 +975,11 @@ export default function CoursesList() {
               </SelectTrigger>
               <SelectContent className="rounded-xl shadow-lg border border-slate-200">
                 <SelectItem value="all">All Fields</SelectItem>
-                {uniqueFields.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+                {uniqueFields.map((f) => (
+                  <SelectItem key={f} value={f}>
+                    {f}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -935,7 +991,11 @@ export default function CoursesList() {
               </SelectTrigger>
               <SelectContent className="rounded-xl shadow-lg border border-slate-200">
                 <SelectItem value="all">All Cities</SelectItem>
-                {uniqueCities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                {uniqueCities.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -972,20 +1032,24 @@ export default function CoursesList() {
 
           {hasActiveFilters && (
             <div className="flex justify-end mt-2">
-              <button onClick={clearAllFilters} className="flex items-center text-sm text-blue-primary hover:text-blue-primary-hover transition-colors duration-200">
+              <button
+                onClick={clearAllFilters}
+                className="flex items-center text-sm text-blue-primary hover:text-blue-primary-hover transition-colors duration-200"
+              >
                 <X className="h-4 w-4 mr-1" /> Clear All Filters
               </button>
             </div>
           )}
         </div>
 
-               {/* Results Count */}
-       <div className="flex justify-between items-center mb-6">
-        <p className="text-gray-600">
-          Showing <span className="font-semibold">{currentCourses.length}</span> of <span className="font-semibold">{courses.length}</span> courses
-         </p>
-       </div>
-
+        {/* Results Count */}
+        <div className="flex justify-between items-center mb-6">
+          <p className="text-gray-600">
+            Showing{" "}
+            <span className="font-semibold">{currentCourses.length}</span> of{" "}
+            <span className="font-semibold">{courses.length}</span> courses
+          </p>
+        </div>
 
         {/* Courses Grid */}
         {currentCourses.length === 0 ? (
@@ -1000,7 +1064,10 @@ export default function CoursesList() {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-6">
             {currentCourses.map((course) => (
-              <div key={course.id} className="transform hover:scale-105 transition-transform duration-200">
+              <div
+                key={course.id}
+                className="transform hover:scale-105 transition-transform duration-200"
+              >
                 <CourseCard course={course} />
               </div>
             ))}
@@ -1010,18 +1077,42 @@ export default function CoursesList() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-3 mt-8">
-            <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
             {[...Array(totalPages)].map((_, i) => (
-              <button key={i} onClick={() => goToPage(i + 1)} className={`px-3 py-1 border rounded ${currentPage === i + 1 ? "bg-blue-primary text-white" : ""}`}>{i + 1}</button>
+              <button
+                key={i}
+                onClick={() => goToPage(i + 1)}
+                className={`px-3 py-1 border rounded ${
+                  currentPage === i + 1 ? "bg-blue-primary text-white" : ""
+                }`}
+              >
+                {i + 1}
+              </button>
             ))}
-            <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages} className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
         )}
       </div>
 
       {/* Back to Top Button */}
       {showScrollTop && (
-        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-blue-primary text-white rounded-full shadow-lg hover:bg-blue-primary-hover transition-colors duration-200 z-50" title="Back to top">
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 p-3 bg-blue-primary text-white rounded-full shadow-lg hover:bg-blue-primary-hover transition-colors duration-200 z-50"
+          title="Back to top"
+        >
           <ChevronUp className="h-5 w-5" />
         </button>
       )}

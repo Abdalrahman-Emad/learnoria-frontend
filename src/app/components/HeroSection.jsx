@@ -32,22 +32,22 @@ const HeroSection = memo(() => {
     setShowTooltip(false)
   }, [selectedCity, selectedField])
 
-const handleSearch = useCallback(() => {
-  if (!selectedCity && !selectedField) {
-    setError("Please select at least one option to search")
-    return
-  }
-  setError(null)
-  setIsSearching(true)
+  const handleSearch = useCallback(() => {
+    if (!selectedCity && !selectedField) {
+      setError("Please select at least one option to search")
+      return
+    }
+    setError(null)
+    setIsSearching(true)
 
-  const params = new URLSearchParams()
-  if (selectedCity) params.append("city", selectedCity)
-  if (selectedField) params.append("field", selectedField)
+    const params = new URLSearchParams()
+    if (selectedCity) params.append("city", selectedCity)
+    if (selectedField) params.append("field", selectedField)
 
-  setTimeout(() => {
-    router.push(`/courses?${params.toString()}`) // Changed from /search to /courses
-  }, 300)
-}, [selectedCity, selectedField, router])
+    setTimeout(() => {
+      router.push(`/courses?${params.toString()}`) // Changed from /search to /courses
+    }, 300)
+  }, [selectedCity, selectedField, router])
 
   useEffect(() => {
     if (error) {
@@ -96,7 +96,10 @@ const handleSearch = useCallback(() => {
         </div>
 
         <motion.div
-          className="relative z-10 container mx-auto flex flex-col items-center justify-center px-4 pt-24 pb-16 text-center min-h-screen"
+
+          // className="relative z-10 container mx-auto flex flex-col items-center justify-center px-4 pt-24 pb-16 text-center min-h-screen"
+          className="relative z-10 max-w-7xl mx-auto flex flex-col items-center justify-center px-6 md:px-8 pt-24 pb-16 text-center min-h-screen"
+
           variants={containerVariants}
           initial="hidden"
           animate={isAnimated ? "visible" : "hidden"}

@@ -75,7 +75,9 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8 grid lg:grid-cols-2 gap-12">
+      {/* <div className="container mx-auto px-4 py-8 grid lg:grid-cols-2 gap-12"> */}
+      <div className="max-w-7xl mx-auto px-6 md:px-8 py-8 grid lg:grid-cols-2 gap-12">
+
         {/* Contact Form */}
         <Card className="shadow-lg">
           <CardHeader>

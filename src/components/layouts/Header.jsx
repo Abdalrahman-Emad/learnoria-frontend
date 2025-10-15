@@ -401,7 +401,7 @@ const Header = memo(() => {
                             ))}
 
                             {/* Search in mobile */}
-                            <motion.div
+                            {/* <motion.div
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ delay: routes.length * 0.1 }}
@@ -410,7 +410,7 @@ const Header = memo(() => {
                                     <Search size={20} />
                                     <span>Search</span>
                                 </button>
-                            </motion.div>
+                            </motion.div> */}
 
                             {/* Mobile Auth Section */}
                             {isAuthenticated && user ? (
@@ -421,7 +421,7 @@ const Header = memo(() => {
                                     className="pt-4 border-t border-slate-200 space-y-3"
                                 >
                                     {/* User Profile Card */}
-                                    <div className="flex items-center space-x-3 px-4 py-3 bg-slate-50 rounded-lg">
+                                    {/* <div className="flex items-center space-x-3 px-4 py-3 bg-slate-50 rounded-lg">
                                         <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
                                             <AvatarImage
                                                 src={getAvatarSrc(user)}
@@ -440,17 +440,17 @@ const Header = memo(() => {
                                                 </span>
                                             )}
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     {/* Profile Actions */}
-                                    <Link
+                                    {/* <Link
                                         href="/profile"
                                         className="flex items-center space-x-3 px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
                                         onClick={closeMobileMenu}
                                     >
                                         <User size={20} />
                                         <span>View Profile</span>
-                                    </Link>
+                                    </Link> */}
 
                                     {/* <Link
                     href="/settings"

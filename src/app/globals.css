@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@layer base {
+  * {
+    @apply box-border m-0 p-0 border-border outline-ring/50;
+  }
+
+  body {
+    @apply w-full h-full bg-background text-foreground;
+  }
+}
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -8,6 +17,11 @@
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE & Edge */
   scrollbar-width: none;     /* Firefox */
+}
+
+html {
+  scrollbar-gutter: stable; /* يحجز مكان دائم للـ scrollbar */
+  overflow-x: hidden;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -135,14 +149,6 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
 
 /* Added utility classes for the blue theme */
 @layer utilities {

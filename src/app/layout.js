@@ -20,6 +20,10 @@ export const metadata = {
   description:
     "Connect with top-rated courses and expert instructors. Transform your skills with personalized learning experiences.",
 };
+export const viewport = {
+  width: "device-width",
+  initialScale: 1.0,
+};
 
 export default function RootLayout({ children }) {
   return (

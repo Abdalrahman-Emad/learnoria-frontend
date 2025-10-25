@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
@@ -21,14 +22,16 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/reset-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, token, password, password_confirmation: confirmPassword }),
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          token,
+          password,
+          password_confirmation: confirmPassword,
+        }),
+      });
 
       const data = await res.json();
       if (res.ok) toast.success("Password reset successfully!");
@@ -79,3 +82,5 @@ export default function ResetPassword() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

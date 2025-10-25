@@ -279,13 +279,6 @@
 //   )
 // );
 
-
-
-
-
-
-
-
 // store/authStore.js
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -302,7 +295,9 @@ const handleAuthError = (error) => {
   } else if (error.status === 429) {
     toast.error("Too many login attempts. Please try again later");
   } else if (error.errors) {
-    Object.values(error.errors).flat().forEach((msg) => toast.error(msg));
+    Object.values(error.errors)
+      .flat()
+      .forEach((msg) => toast.error(msg));
   } else {
     toast.error(error.message || "Something went wrong");
   }
@@ -324,6 +319,7 @@ export const useAuthStore = create(
       setLoading: (loading) => set({ loading }),
 
       // ✅ تسجيل الدخول
+      // ✅ تسجيل الدخول
       login: async (email, password) => {
         set({ loading: true });
         try {
@@ -332,14 +328,32 @@ export const useAuthStore = create(
             body: { email, password },
           });
 
-          const userData = { ...data.user, token: data.token };
+          console.log("Login response:", data); // 👀 شوف شكل الـ response
+
+          // ✅ دعم كل الأشكال المحتملة للـ token
+          const token =
+            data.token ||
+            data.access_token ||
+            data.authorisation?.token ||
+            data?.data?.token;
+
+          if (!token) {
+            throw new Error("No token returned from server");
+          }
+
+          const userData = { ...data.user, token };
+
           set({
             user: userData,
             isAuthenticated: true,
             loading: false,
           });
 
-          Cookies.set("auth-token", data.token, { sameSite: "Lax", expires: 7 });
+          Cookies.set("auth-token", token, {
+            sameSite: "Lax",
+            secure: true,
+            expires: 7,
+          });
 
           return userData;
         } catch (error) {
@@ -366,7 +380,10 @@ export const useAuthStore = create(
             loading: false,
           });
 
-          Cookies.set("auth-token", data.token, { sameSite: "Lax", expires: 7 });
+          Cookies.set("auth-token", data.token, {
+            sameSite: "Lax",
+            expires: 7,
+          });
           return userData;
         } catch (error) {
           set({ loading: false });
